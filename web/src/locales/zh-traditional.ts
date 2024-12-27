@@ -33,6 +33,7 @@ export default {
       pleaseSelect: '請選擇',
       pleaseInput: '請輸入',
       submit: '提交',
+      embedIntoSite: '嵌入網站',
     },
     login: {
       login: '登入',
@@ -75,7 +76,7 @@ export default {
       namePlaceholder: '請輸入名稱',
       doc: '文件',
       searchKnowledgePlaceholder: '搜索',
-      noMoreData: 'It is all, nothing more',
+      noMoreData: `That's all. Nothing more.`,
     },
     knowledgeDetails: {
       dataset: '數據集',
@@ -118,8 +119,8 @@ export default {
       view: '看法',
       filesSelected: '選定的文件',
       upload: '上傳',
-      run: '啟動',
-      runningStatus0: '未啟動',
+      run: '解析',
+      runningStatus0: '未解析',
       runningStatus1: '解析中',
       runningStatus2: '取消',
       runningStatus3: '成功',
@@ -161,6 +162,7 @@ export default {
       autoKeywordsTip: `在查詢此類關鍵字時，為每個區塊提取 N 個關鍵字以提高其排名分數。在「系統模型設定」中設定的 LLM 將消耗額外的 token。您可以在區塊清單中查看結果。 `,
       autoQuestions: '自動問題',
       autoQuestionsTip: `在查詢此類問題時，為每個區塊提取 N 個問題以提高其排名分數。在「系統模型設定」中設定的 LLM 將消耗額外的 token。您可以在區塊清單中查看結果。如果發生錯誤，此功能不會破壞整個分塊過程，除了將空結果新增至原始區塊。 `,
+      redo: '是否清空已有 {{chunkNum}}個 chunk？',
     },
     knowledgeConfiguration: {
       titleDescription: '在這裡更新您的知識庫詳細信息，尤其是解析方法。',
@@ -414,6 +416,7 @@ export default {
       partialTitle: '部分嵌入',
       extensionTitle: 'Chrome 插件',
       tokenError: '請先創建 API Token!',
+      betaError: '請先在系統設定中申請API密鑰。',
       searching: '搜索中',
       parsing: '解析中',
       uploading: '上傳中',
@@ -428,6 +431,7 @@ export default {
       multiTurnTip:
         '在多輪對話的中，對去知識庫查詢的問題進行最佳化。會呼叫大模型額外消耗token。',
       howUseId: '如何使用聊天ID？',
+      description: '助理描述',
     },
     setting: {
       profile: '概述',
@@ -1012,6 +1016,22 @@ export default {
       templateDescription: '此元件用於排版各種元件的輸出。 ',
       jsonUploadTypeErrorMessage: '請上傳json檔',
       jsonUploadContentErrorMessage: 'json 檔案錯誤',
+      iterationDescription: `此元件首先透過「分隔符號」將輸入拆分為陣列。
+對數組中的元素依序執行相同的操作步驟，直到輸出所有結果，可以理解為任務批次處理器。
+
+例如，在長文本翻譯迭代節點內，如果所有內容都輸入到LLM節點，則可能會達到單次對話限制。上游節點可以先將長文本拆分為多個分片，並配合迭代節點對每個分片進行批次翻譯，避免達到單次對話的LLM訊息限制。`,
+      delimiterTip: `此分隔符號用於將輸入文字分割成多個文字片段，其中的回顯將作為每次迭代的輸入項執行。`,
+      delimiterOptions: {
+        comma: '逗號',
+        lineBreak: '換行',
+        tab: '製表符',
+        underline: '底線',
+        diagonal: '斜線',
+        minus: '減號',
+        semicolon: '分號',
+      },
+      addVariable: '新增變數',
+      variableSettings: '變數設定',
     },
     footer: {
       profile: '“保留所有權利 @ react”',

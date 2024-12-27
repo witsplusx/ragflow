@@ -16,7 +16,6 @@
 
 import logging
 import re
-import json
 from dataclasses import dataclass
 
 from rag.utils import rmSpace
@@ -71,10 +70,10 @@ class Dealer:
         pg = int(req.get("page", 1)) - 1
         topk = int(req.get("topk", 1024))
         ps = int(req.get("size", topk))
-        offset, limit = pg * ps, (pg + 1) * ps
+        offset, limit = pg * ps, ps
 
-        src = req.get("fields", ["docnm_kwd", "content_ltks", "kb_id", "img_id", "title_tks", "important_kwd",
-                                 "doc_id", "position_list", "knowledge_graph_kwd", "question_kwd", "question_tks",
+        src = req.get("fields", ["docnm_kwd", "content_ltks", "kb_id", "img_id", "title_tks", "important_kwd", "position_int",
+                                 "doc_id", "page_num_int", "top_int", "create_timestamp_flt", "knowledge_graph_kwd", "question_kwd", "question_tks",
                                  "available_int", "content_with_weight", "pagerank_fea"])
         kwds = set([])
 
@@ -82,6 +81,8 @@ class Dealer:
         q_vec = []
         if not qst:
             if req.get("sort"):
+                orderBy.asc("page_num_int")
+                orderBy.asc("top_int")
                 orderBy.desc("create_timestamp_flt")
             res = self.dataStore.search(src, [], filters, [], orderBy, offset, limit, idx_names, kb_ids)
             total=self.dataStore.getTotal(res)
@@ -312,7 +313,7 @@ class Dealer:
         ranks["total"] = sres.total
 
         if page <= RERANK_PAGE_LIMIT:
-            if rerank_mdl:
+            if rerank_mdl and sres.total > 0:
                 sim, tsim, vsim = self.rerank_by_model(rerank_mdl,
                     sres, question, 1 - vector_similarity_weight, vector_similarity_weight)
             else:
@@ -340,7 +341,7 @@ class Dealer:
             chunk = sres.field[id]
             dnm = chunk["docnm_kwd"]
             did = chunk["doc_id"]
-            position_list = chunk.get("position_list", "[]")
+            position_int = chunk.get("position_int", [])
             d = {
                 "chunk_id": id,
                 "content_ltks": chunk["content_ltks"],
@@ -354,7 +355,7 @@ class Dealer:
                 "vector_similarity": vsim[i],
                 "term_similarity": tsim[i],
                 "vector": chunk.get(vector_column, zero_vector),
-                "positions": json.loads(position_list)
+                "positions": position_int,
             }
             if highlight and sres.highlight:
                 if id in sres.highlight:
@@ -379,6 +380,13 @@ class Dealer:
 
     def chunk_list(self, doc_id: str, tenant_id: str, kb_ids: list[str], max_count=1024, fields=["docnm_kwd", "content_with_weight", "img_id"]):
         condition = {"doc_id": doc_id}
-        res = self.dataStore.search(fields, [], condition, [], OrderByExpr(), 0, max_count, index_name(tenant_id), kb_ids)
-        dict_chunks = self.dataStore.getFields(res, fields)
-        return dict_chunks.values()
+        res = []
+        bs = 128
+        for p in range(0, max_count, bs):
+            es_res = self.dataStore.search(fields, [], condition, [], OrderByExpr(), p, bs, index_name(tenant_id), kb_ids)
+            dict_chunks = self.dataStore.getFields(es_res, fields)
+            if dict_chunks:
+                res.extend(dict_chunks.values())
+            if len(dict_chunks.values()) < bs:
+                break
+        return res

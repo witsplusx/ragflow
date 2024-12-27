@@ -115,8 +115,8 @@ export default {
       view: 'Ver',
       filesSelected: 'Archivos seleccionados',
       upload: 'Subir',
-      run: 'Ejecutar',
-      runningStatus0: 'NO INICIADO',
+      run: 'Analizar Gramaticalmente',
+      runningStatus0: 'Irresoluto',
       runningStatus1: 'Analizando',
       runningStatus2: 'CANCELADO',
       runningStatus3: 'ÉXITO',
@@ -277,6 +277,7 @@ export default {
       multiTurn: 'Optimización de múltiples turnos',
       multiTurnTip:
         'En conversaciones de múltiples rondas, la consulta a la base de conocimiento se optimiza. El gran modelo se llamará para consumir tokens adicionales.',
+      description: 'Description of assistant',
     },
     setting: {
       profile: 'Perfil',

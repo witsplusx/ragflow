@@ -1,8 +1,9 @@
+import { useTheme } from '@/components/theme-provider';
 import { Flex } from 'antd';
 import classNames from 'classnames';
 import { get } from 'lodash';
 import { Handle, NodeProps, Position } from 'reactflow';
-import { useGetComponentLabelByValue } from '../../hooks';
+import { useGetComponentLabelByValue } from '../../hooks/use-get-begin-query';
 import { IGenerateParameter, NodeData } from '../../interface';
 import { LeftHandleStyle, RightHandleStyle } from './handle-icon';
 import NodeHeader from './node-header';
@@ -17,12 +18,17 @@ export function TemplateNode({
 }: NodeProps<NodeData>) {
   const parameters: IGenerateParameter[] = get(data, 'form.parameters', []);
   const getLabel = useGetComponentLabelByValue(id);
-
+  const { theme } = useTheme();
   return (
     <section
-      className={classNames(styles.logicNode, {
-        [styles.selectedNode]: selected,
-      })}
+      className={classNames(
+        styles.logicNode,
+        theme === 'dark' ? styles.dark : '',
+
+        {
+          [styles.selectedNode]: selected,
+        },
+      )}
     >
       <Handle
         id="c"

@@ -17,6 +17,7 @@ export interface IOperator {
   obj: IOperatorNode;
   downstream: string[];
   upstream: string[];
+  parent_id?: string;
 }
 
 export interface IOperatorNode {
@@ -29,8 +30,8 @@ export interface IGraph {
   edges: Edge[];
 }
 
-export interface IFlow {
-  avatar: null;
+export declare interface IFlow {
+  avatar?: null | string;
   canvas_type: null;
   create_date: string;
   create_time: number;

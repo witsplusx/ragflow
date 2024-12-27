@@ -185,12 +185,18 @@ class ESConnection(DocStoreConnection):
             orders = list()
             for field, order in orderBy.fields:
                 order = "asc" if order == 0 else "desc"
-                orders.append({field: {"order": order, "unmapped_type": "float",
-                                       "mode": "avg", "numeric_type": "double"}})
+                if field in ["page_num_int", "top_int"]:
+                    order_info = {"order": order, "unmapped_type": "float",
+                                "mode": "avg", "numeric_type": "double"}
+                elif field.endswith("_int") or field.endswith("_flt"):
+                    order_info = {"order": order, "unmapped_type": "float"}
+                else:
+                    order_info = {"order": order, "unmapped_type": "text"}
+                orders.append({field: order_info})
             s = s.sort(*orders)
 
         if limit > 0:
-            s = s[offset:limit]
+            s = s[offset:offset+limit]
         q = s.to_dict()
         logger.debug(f"ESConnection.search {str(indexNames)} query: " + json.dumps(q))
 

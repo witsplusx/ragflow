@@ -1,3 +1,4 @@
+import { useTheme } from '@/components/theme-provider';
 import { Flex } from 'antd';
 import classNames from 'classnames';
 import get from 'lodash/get';
@@ -18,12 +19,16 @@ import styles from './index.less';
 export function BeginNode({ selected, data }: NodeProps<NodeData>) {
   const { t } = useTranslation();
   const query: BeginQuery[] = get(data, 'form.query', []);
-
+  const { theme } = useTheme();
   return (
     <section
-      className={classNames(styles.ragNode, {
-        [styles.selectedNode]: selected,
-      })}
+      className={classNames(
+        styles.ragNode,
+        theme === 'dark' ? styles.dark : '',
+        {
+          [styles.selectedNode]: selected,
+        },
+      )}
     >
       <Handle
         type="source"
@@ -39,7 +44,9 @@ export function BeginNode({ selected, data }: NodeProps<NodeData>) {
           fontSize={24}
           color={operatorMap[data.label as Operator].color}
         ></OperatorIcon>
-        <div className={styles.nodeTitle}>{t(`flow.begin`)}</div>
+        <div className="truncate text-center font-semibold text-sm">
+          {t(`flow.begin`)}
+        </div>
       </Flex>
       <Flex gap={8} vertical className={styles.generateParameters}>
         {query.map((x, idx) => {

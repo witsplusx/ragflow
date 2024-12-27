@@ -120,8 +120,8 @@ export default {
       view: 'Lihat',
       filesSelected: 'File Terpilih',
       upload: 'Unggah',
-      run: 'Jalankan',
-      runningStatus0: 'BELUM DIMULAI',
+      run: 'Menguraikan',
+      runningStatus0: 'Belum Terselesaikan',
       runningStatus1: 'Parsing',
       runningStatus2: 'BATAL',
       runningStatus3: 'SUKSES',
@@ -449,6 +449,7 @@ export default {
       multiTurnTip:
         'Dalam percakapan multi-putaran, kueri ke basis pengetahuan dioptimalkan. Model besar akan dipanggil untuk mengonsumsi token tambahan.',
       languageSelectionTip: 'Pilih bahasa yang digunakan dalam percakapan.',
+      description: 'Description of assistant',
     },
     setting: {
       profile: 'Profil',
@@ -748,7 +749,7 @@ export default {
       bingTip:
         'Komponen ini digunakan untuk mendapatkan hasil pencarian dari https://www.bing.com/. Biasanya, ini berfungsi sebagai pelengkap basis pengetahuan. Top N dan Kunci Langganan Bing menentukan jumlah hasil pencarian yang perlu Anda sesuaikan.',
       apiKey: 'Kunci API',
-      country: 'Negara&Wilayah',
+      country: 'Negara',
       language: 'Bahasa',
       googleScholar: 'Google Scholar',
       googleScholarDescription:
