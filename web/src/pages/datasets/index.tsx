@@ -1,7 +1,10 @@
 import ListFilterBar from '@/components/list-filter-bar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useNavigatePage } from '@/hooks/logic-hooks/navigate-hooks';
 import { ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
+import { DatasetCreatingDialog } from './dataset-creating-dialog';
+import { useSaveKnowledge } from './hooks';
 
 const datasets = [
   {
@@ -79,9 +82,18 @@ const datasets = [
 ];
 
 export default function Datasets() {
+  const {
+    visible,
+    hideModal,
+    showModal,
+    onCreateOk,
+    loading: creatingLoading,
+  } = useSaveKnowledge();
+  const { navigateToDataset } = useNavigatePage();
+
   return (
     <section className="p-8 text-foreground">
-      <ListFilterBar title="Datasets">
+      <ListFilterBar title="Datasets" showDialog={showModal}>
         <Plus className="mr-2 h-4 w-4" />
         Create dataset
       </ListFilterBar>
@@ -113,7 +125,11 @@ export default function Datasets() {
                     Created {dataset.created}
                   </p>
                 </div>
-                <Button variant="secondary" size="icon">
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  onClick={navigateToDataset}
+                >
                   <ChevronRight className="h-6 w-6" />
                 </Button>
               </div>
@@ -121,6 +137,13 @@ export default function Datasets() {
           </Card>
         ))}
       </div>
+      {visible && (
+        <DatasetCreatingDialog
+          hideModal={hideModal}
+          onOk={onCreateOk}
+          loading={creatingLoading}
+        ></DatasetCreatingDialog>
+      )}
     </section>
   );
 }
