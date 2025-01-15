@@ -35,6 +35,7 @@ from api.utils.api_utils import get_result, token_required
 from api.db.services.llm_service import LLMBundle
 
 
+
 @manager.route('/chats/<chat_id>/sessions', methods=['POST'])  # noqa: F821
 @token_required
 def create(tenant_id, chat_id):
@@ -92,6 +93,9 @@ def create_agent_session(tenant_id, agent_id):
                 else:
                     if "value" in ele:
                         ele.pop("value")
+    else:
+        for ans in canvas.run(stream=False):
+            pass
     cvs.dsl = json.loads(str(canvas))
     conv = {
         "id": get_uuid(),
@@ -166,9 +170,9 @@ def agent_completions(tenant_id, agent_id):
         dsl = cvs[0].dsl
         if not isinstance(dsl, str):
             dsl = json.dumps(dsl)
-        canvas = Canvas(dsl, tenant_id)
-        if canvas.get_preset_param():
-            req["question"] = ""
+        #canvas = Canvas(dsl, tenant_id)
+        #if canvas.get_preset_param():
+        #    req["question"] = ""
         conv = API4ConversationService.query(id=req["session_id"], dialog_id=agent_id)
         if not conv:
             return get_error_data_result(f"You don't own the session {req['session_id']}")

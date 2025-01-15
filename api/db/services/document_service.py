@@ -66,8 +66,8 @@ class DocumentService(CommonService):
         else:
             docs = docs.order_by(cls.model.getter_by(orderby).asc())
 
-        docs = docs.paginate(page_number, items_per_page)
         count = docs.count()
+        docs = docs.paginate(page_number, items_per_page)
         return list(docs.dicts()), count
 
     @classmethod
@@ -570,7 +570,7 @@ def doc_upload_and_parse(conversation_id, file_objs, user_id):
                     "kb_id": [kb.id],
                     "docnm_kwd": doc_nm[doc_id],
                     "title_tks": rag_tokenizer.tokenize(re.sub(r"\.[a-zA-Z]+$", "", doc_nm[doc_id])),
-                    "content_ltks": "",
+                    "content_ltks": rag_tokenizer.tokenize("summary summarize 总结 概况 file 文件 概括"),
                     "content_with_weight": mind_map,
                     "knowledge_graph_kwd": "mind_map"
                 })
