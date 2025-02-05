@@ -90,6 +90,10 @@ export const useRenameCurrentFile = () => {
   };
 };
 
+export type UseRenameCurrentFileReturnType = ReturnType<
+  typeof useRenameCurrentFile
+>;
+
 export const useSelectBreadcrumbItems = () => {
   const parentFolderList = useFetchParentFolderList();
 
@@ -224,7 +228,7 @@ export const useHandleConnectToKnowledge = () => {
   );
 
   return {
-    initialValue,
+    initialConnectedIds: initialValue,
     connectToKnowledgeLoading: loading,
     onConnectToKnowledgeOk,
     connectToKnowledgeVisible,
@@ -232,6 +236,10 @@ export const useHandleConnectToKnowledge = () => {
     showConnectToKnowledgeModal: handleShowConnectToKnowledgeModal,
   };
 };
+
+export type UseHandleConnectToKnowledgeReturnType = ReturnType<
+  typeof useHandleConnectToKnowledge
+>;
 
 export const useHandleBreadcrumbClick = () => {
   const navigate = useNavigate();
