@@ -75,6 +75,7 @@ from .chat_model import (
     UpstageChat,
     NovitaAIChat,
     SILICONFLOWChat,
+    PPIOChat,
     YiChat,
     ReplicateChat,
     HunyuanChat,
@@ -84,6 +85,7 @@ from .chat_model import (
     GoogleChat,
     HuggingFaceChat,
     GPUStackChat,
+    ModelScopeChat,
 )
 
 from .cv_model import (
@@ -220,6 +222,7 @@ ChatModel = {
     "Upstage": UpstageChat,
     "novita.ai": NovitaAIChat,
     "SILICONFLOW": SILICONFLOWChat,
+    "PPIO": PPIOChat,
     "01.AI": YiChat,
     "Replicate": ReplicateChat,
     "Tencent Hunyuan": HunyuanChat,
@@ -229,6 +232,7 @@ ChatModel = {
     "Google Cloud": GoogleChat,
     "HuggingFace": HuggingFaceChat,
     "GPUStack": GPUStackChat,
+    "ModelScope":ModelScopeChat,
 }
 
 RerankModel = {
