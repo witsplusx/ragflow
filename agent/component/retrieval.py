@@ -19,11 +19,11 @@ from abc import ABC
 import pandas as pd
 
 from api.db import LLMType
-from api.db.services.dialog_service import label_question
 from api.db.services.knowledgebase_service import KnowledgebaseService
 from api.db.services.llm_service import LLMBundle
 from api import settings
 from agent.component.base import ComponentBase, ComponentParamBase
+from rag.app.tag import label_question
 
 
 class RetrievalParam(ComponentParamBase):
@@ -53,7 +53,9 @@ class Retrieval(ComponentBase, ABC):
     def _run(self, history, **kwargs):
         query = self.get_input()
         query = str(query["content"][0]) if "content" in query else ""
-
+        lines = query.split('\n')
+        user_queries = [line.split("USER:", 1)[1] for line in lines if line.startswith("USER:")]
+        query = user_queries[-1] if user_queries else ""
         kbs = KnowledgebaseService.get_by_ids(self._param.kb_ids)
         if not kbs:
             return Retrieval.be_output("")
