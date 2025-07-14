@@ -20,12 +20,17 @@ import ChunkResultBar from './components/chunk-result-bar';
 import CheckboxSets from './components/chunk-result-bar/checkbox-sets';
 import DocumentHeader from './components/document-preview/document-header';
 
+import { PageHeader } from '@/components/page-header';
 import message from '@/components/ui/message';
 import {
   RAGFlowPagination,
   RAGFlowPaginationType,
 } from '@/components/ui/ragflow-pagination';
 import { Spin } from '@/components/ui/spin';
+import {
+  QueryStringMap,
+  useNavigatePage,
+} from '@/hooks/logic-hooks/navigate-hooks';
 import styles from './index.less';
 
 const Chunk = () => {
@@ -56,7 +61,7 @@ const Chunk = () => {
     chunkUpdatingVisible,
     documentId,
   } = useUpdateChunk();
-
+  const { navigateToDataset, getQueryString } = useNavigatePage();
   useEffect(() => {
     setChunkList(data);
   }, [data]);
@@ -159,6 +164,10 @@ const Chunk = () => {
 
   return (
     <>
+      <PageHeader
+        title="Back"
+        back={navigateToDataset(getQueryString(QueryStringMap.id) as string)}
+      ></PageHeader>
       <div className={styles.chunkPage}>
         <div className="flex flex-1 gap-8">
           <div className="w-2/5">
@@ -183,9 +192,9 @@ const Chunk = () => {
             <Spin spinning={loading} className={styles.spin} size="large">
               <div className="h-[100px] flex flex-col justify-end pb-[5px]">
                 <div>
-                  <h2 className="text-[24px]">Chunk Result</h2>
+                  <h2 className="text-[24px]">{t('chunk.chunkResult')}</h2>
                   <div className="text-[14px] text-[#979AAB]">
-                    View the chunked segments used for embedding and retrieval.
+                    {t('chunk.chunkResultTip')}
                   </div>
                 </div>
               </div>
