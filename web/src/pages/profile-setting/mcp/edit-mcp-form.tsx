@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { RAGFlowSelect } from '@/components/ui/select';
 import { IModalProps } from '@/interfaces/common';
 import { buildOptions } from '@/utils/form';
-import { Editor, loader } from '@monaco-editor/react';
+import { loader } from '@monaco-editor/react';
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,23 +37,26 @@ export function useBuildFormSchema() {
     name: z
       .string()
       .min(1, {
-        message: t('common.namePlaceholder'),
+        message: t('common.mcp.namePlaceholder'),
+      })
+      .regex(/^[a-zA-Z0-9_-]{1,64}$/, {
+        message: t('common.mcp.nameRequired'),
       })
       .trim(),
     url: z
       .string()
       .url()
       .min(1, {
-        message: t('common.namePlaceholder'),
+        message: t('common.mcp.urlPlaceholder'),
       })
       .trim(),
     server_type: z
       .string()
       .min(1, {
-        message: t('common.namePlaceholder'),
+        message: t('common.pleaseSelect'),
       })
       .trim(),
-    headers: z.record(z.string(), z.any()).optional(),
+    authorization_token: z.string().optional(),
   });
 
   return FormSchema;
@@ -89,7 +92,7 @@ export function EditMcpForm({
               <FormLabel>{t('common.name')}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={t('common.namePlaceholder')}
+                  placeholder={t('common.mcp.namePlaceholder')}
                   {...field}
                   autoComplete="off"
                 />
@@ -106,7 +109,7 @@ export function EditMcpForm({
               <FormLabel>{t('mcp.url')}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={t('common.namePlaceholder')}
+                  placeholder={t('common.mcp.urlPlaceholder')}
                   {...field}
                   autoComplete="off"
                   onChange={(e) => {
@@ -142,18 +145,18 @@ export function EditMcpForm({
         />
         <FormField
           control={form.control}
-          name="headers"
+          name="authorization_token"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Headers</FormLabel>
+              <FormLabel>Authorization Token</FormLabel>
               <FormControl>
-                <Editor
-                  height={200}
-                  defaultLanguage="json"
-                  theme="vs-dark"
+                <Input
+                  placeholder={t('common.mcp.tokenPlaceholder')}
                   {...field}
-                  onChange={(value) => {
-                    field.onChange(value);
+                  autoComplete="off"
+                  type="password"
+                  onChange={(e) => {
+                    field.onChange(e.target.value.trim());
                     setFieldChanged(true);
                   }}
                 />
